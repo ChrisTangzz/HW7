@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Local Storage</title>
+    <style type="text/CSS">
+        table {
+            width: 90%;
+            border-collapse: collapse;
+            background-color: lightblue;
+            font-family: Perpetua;
+        }
+
+        table, td, th {
+            border: 1px solid black;
+            padding: 4px;
+        }
+
+        th {
+            text-align: center;
+            color: white;
+            background-color: darkblue;
+        }
+
+        tr.oddrow {
+            background-color: white;
+        }
+
+        td {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="#">
+        <p>
+            <label>Book Title:<input type="text" id="title"></label>
+            <label>Author(s):<input type="text" id="author"></label>
+            <label>Year:<input type="number" id="year"></label>
+            <label>Book URL:<input type="url" id="bu"></label>
+        </p>
+        <p>
+            <input type="button" value="Add New Item" id="addButton">
+            <input type="button" value="Remove All Items" id="removeAllButton">
+        </p>
+    </form>
+    <hr>
+    <table id="display">
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Year</th>
+            <th>URL</th>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        document.getElementById("addButton").addEventListener("click", set, false);
+        document.getElementById("removeAllButton").addEventListener("click", reall, false);
+        let Title = document.getElementById("title");
+        let Author = document.getElementById("author");
+        let Year = document.getElementById("year");
+        let Bu = document.getElementById("bu");
+        function set() {
+            let object =
+            {
+                title: Title.value,
+                author: Author.value,
+                year: Year.value,
+                url: Bu.value
+            };
+            let time = new Date();
+            time = time.getTime();
+            let data = JSON.stringify(object);
+            localStorage.setItem("ntou-" + time, data);
+            loadhtml();
+        }
+        function reall(){
+            localStorage.clear();
+            document.getElementById("display").innerHTML = "<tr><th>Title</th><th>Author</th><th>Year</th><th>URL</th></tr>";
+            window.alert("All items were removed");
+        }
+        function loadhtml() {
+            let tag = [];
+            let input = "";
+            for (let i = 0; i < localStorage.length; i++) {
+                tag[i] = localStorage.key(i);
+            }
+            for (i in tag) {
+                let item = localStorage.getItem(tag[i]);
+                item = JSON.parse(item);
+                let nowline = "<tr>" + "<td>" + item.title + "</td>"
+                    + "<td>" + item.author + "</td>"
+                    + "<td>" + item.year + "</td>"
+                    + "<td>" + "<a href="+ item.url +">" + item.url +"</a>" + "</td>"
+                    + "</tr>";
+                input += nowline;
+            }
+            document.getElementById("display").innerHTML = "<tr><th>Title</th><th>Author</th><th>Year</th><th>URL</th></tr>" + input;
+        }
+
+    </script>
+
+</body>
+
+</html>
